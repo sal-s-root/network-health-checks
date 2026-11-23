@@ -1,25 +1,26 @@
-# Network health checks
+# Network diagnostics
 
-## Purpose
-
-Build on shell inspection with Python, DNS, TCP sockets, JSON, and failure handling.
-
-## Run locally
+Python TCP probes and a validated sequential target manifest for authorized hosts.
+Results are JSON, including elapsed connection time and explicit failure details.
 
 ```sh
 python3 -m unittest -v
 python3 check.py localhost 8080 --timeout 2
+python3 batch.py examples/targets.json
 ```
 
-## Scope and limitations
+Exit 0 indicates successful checks, 1 a failed connection, and 2 invalid input.
+The batch validates all targets before probing and limits a run to 100 targets.
+The connection timeout is not an overall DNS or multi-address deadline.
 
-Python standard library only. The example expects a local service on port 8080. DNS resolution has no total deadline; TCP checks do not verify HTTP behavior.
+## Troubleshoot by layer
 
-## Engineering notes
+1. Confirm the intended hostname, port, client network, and expected route.
+2. Inspect resolution with `getent hosts` or your platform's DNS tooling.
+3. Inspect local listeners with `ss -lnt` where available.
+4. Run the TCP probe from the affected network.
+5. Check HTTP readiness and application behavior separately.
 
-See [LEARNING.md](LEARNING.md) for the design decisions, verification evidence,
-and next steps. Never commit credentials, private hostnames, or real incident data.
-
-## Batch checks
-
-Start a local service and run `python3 batch.py examples/targets.json`. The batch is sequential, capped at 100 targets, and validates the whole manifest before probing. Exit 1 means at least one check failed; exit 2 indicates invalid input. DNS can exceed the configured per-connection timeout.
+A TCP handshake does not prove TLS trust, authentication, correct HTTP responses,
+or service health. This tool does not scan address ranges or change firewall rules.
+See [runbook](RUNBOOK.md) and [checks](VALIDATION.md).
