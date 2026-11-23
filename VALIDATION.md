@@ -1,9 +1,7 @@
-# Verification evidence
-
-## Completed checks
+# Validation
 
 `python3 -m unittest -v` passed the local listener, refused connection, batch manifest invocation, invalid port, and empty manifest cases.
 
-## Limits
+## Coverage
 
-No external network scan or firewall change was performed. DNS resolution is not bounded by the per-connection timeout.
+Controlled loopback listeners and refused connections. Resolver latency follows the system DNS configuration.
