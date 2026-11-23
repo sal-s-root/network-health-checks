@@ -24,3 +24,7 @@ The connection timeout is not an overall DNS or multi-address deadline.
 A TCP handshake does not prove TLS trust, authentication, correct HTTP responses,
 or service health. This tool does not scan address ranges or change firewall rules.
 See [runbook](RUNBOOK.md) and [checks](VALIDATION.md).
+
+## Project history
+
+See [history and scope](HISTORY.md) for the correction of earlier synthetic dates.
